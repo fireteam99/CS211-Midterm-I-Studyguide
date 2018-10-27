@@ -38,5 +38,7 @@ Starts with an optional modifier, type and then the name. `short int x;` `long d
 There exits: ***char***, ***int***, ***float***, ***double***, with modifiers ***short***, ***long***, and ***signed***, ***unsigned***.
 ### Arithmetic Operatiors
 Contains `*, /, %, +, -, ++, --`. Remember that `x++` changes the value after it is used and `++x` changes the value before it is used. Same with `x--` and `--x`.
+### Relational Operators
+Include: `>, >=, <. <=, ==, !=`. The result is 1 (TRUE) or 0 (FALSE).
 
 
