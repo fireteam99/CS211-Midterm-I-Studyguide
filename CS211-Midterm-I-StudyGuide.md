@@ -40,5 +40,56 @@ There exits: ***char***, ***int***, ***float***, ***double***, with modifiers **
 Contains `*, /, %, +, -, ++, --`. Remember that `x++` changes the value after it is used and `++x` changes the value before it is used. Same with `x--` and `--x`.
 ### Relational Operators
 Include: `>, >=, <. <=, ==, !=`. The result is 1 (TRUE) or 0 (FALSE).
+### Bit Operators
+Contains the symbols: `~` complement used as `~x`, `&` bit AND used as `x & y`, and `|` bit OR used as `x | y`.
+### Expressions and Assignments
+Expressions are computations with a result. Example: `x + y * z`. Be aware that c does explicit type conversion with double being the rank and char/short int being the lowest rank. Assignments work by setting the value of an expression to a variable. Example: `a = x + y * z`.
+### Control Statements
+Conditional: if else, switch. Iteration: while, for, do while. Goto: break, continue, goto.
+### If Statements
+Keeps on evaluating expressions until one found with non-zero result.
 
+```
+if (condition 1) {
+    body...
+} else if (condition 2) {
+    body...
+} else {
+    body...
+}
+```
 
+### Switch Statements
+Evaluates an integer expression and after finding the 1st case with matching contatcy executes statements until encountering break or end of switch. Remember to include a default case.
+
+```
+switch(expr) {
+    case 1:
+        statement 1;
+    case 2:
+        statement 2;
+    defualt:
+        statement 3;
+}
+```
+### Loops
+
+```
+// for
+for (i = 0; i < 10; i ++) {
+    ...
+}
+// while
+while (i < 10) {
+    ...
+    i++;
+}
+// do while
+do {
+    ...
+    i++
+} while (i < 10)
+```
+
+### Specialized Go-to's
+The `break` statement forces an immediate exit from siwtch or loop and goes to the code following that switch or loop. The `continue` statements skips the rest of the code in the body of a loop and restarts the loop.
