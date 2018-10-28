@@ -145,7 +145,7 @@ Some useful functions include strcpy, strcmp. and strlen.
 ### Structures
 Groups together related data of different data types kind of like objects. Defined as:
 
-```
+```c
 struct person {
 	int height;
 	int weight;
@@ -155,7 +155,7 @@ struct person {
 It tells the compiler how big the struct is and how the data items are laid out in memory. To declare a struct: `struct person john;`. Declaration can be simplified by using a typdef.
 
 
-```
+```c
 typedef struct Persons {
 int height;
 	int weight;
@@ -163,7 +163,7 @@ int height;
 } Person;
 ```
 Now we can declare a person by simply doing `Person john;`.
-### Pointer to Struts
+### Pointer to Structs
 To declare a pointer to a struct: `struct Person *john;`. To access members of struct we can use the dot operator `.` and dereference it `(*person).name` or just the special arrow operator `->` directly `person->name `.
 ### Dynamic Allocation
 We need dynamic memory allocation when we don't how much data we have during compile time. These varibles are declared on the heap rather than the stack.
@@ -192,4 +192,47 @@ Opens a file in your program. `FILE *fopen(char* name, char* mode);` The first a
 ### fprintf and fscanf
 Once open, a file written to or read from using `fprintf()` like: `fprintf(outfile, "The answer is %d\n", x);` and `fscanf()` like `fscanf(infile, "%s %d/%d/%d %lf",
  &name, &bMonth, &bDay, &bYear, &gpa);`.
- Remember that programs have three streams open `stdin, stdout, sterr`.
+Remember that programs have three streams open `stdin, stdout, sterr`.
+### Multidimensional Arrays
+On the stack they can be declared as `array[ROWS][COLS]`. When passing them to a function, the rows dimension can be dropped, but the number of culumns is needed. `void transpose(double matrix[][3]);`
+### Double Pointers
+Single pointers and single dimension arrays can be used interchangably but for higher dimensions char[X][Y] is simple an array of arrays all of the items are stored contigously in memory as a rectangle. It would look something like this: `char[2][2] = [item(0,0) , item(0,1), item(1,0), item(1,1)]`. On the other hand, `char **argv` is just a pointer to a pointer.
+### Allocating Multidimensional Arrays
+#### Single Pointer
+There are two ways you can dynamically allocate a 2d array. The first is to flatten the 2d array by allocating `x = rows * cols` memory using `data_type *arr = malloc(sizeof(data_type) * x)`. Afterwards you can access the nth row and mth column using this offset: `arr[n*cols) + m]`  This is similar to how the stack allocates 2d arrays. 
+#### Double Pointer
+First allocate a 1d array of pointers corresponding to how many rows the array has. `data_type **arr = malloc(sizeof(int *) * rows);`. Then you use a nested for loop make each of those pointers point to a 1d array of the actual data you want. `arr[i][j] = malloc(sizeof(int) * cols);`
+### Compilation
+**C Source code --> Pre-processor --> Compiler --> Assembly --> Assembler --> Relocatable Object --> Linker --> Executable**  
+Seperate compilation follows the same steps but links the multiple relocatable objects together at the end.
+### Running on Hardware
+The ISA (Instruction Set Architecture) interfeces between the soft ware and hardware.
+### Base n Notation
+Numbers are written as a sequence of digits that are multiplied by a place value. For example in base 10, one hundred and twelve is written as: `1 * 10^2 + 1 * 10^1 + 2 * 10^0`
+### Base 2: Binary
+The only digits are 0 and 1 in binary. A bit is one binary digit. Binary is good for computers because you can represent them as on/off switches, but are hard to read for humans.
+### Base 16: Hexadecimal
+Digits include 0-9 and A-F which represent ten through fifteen. Since 16 = 2^4, one hex digit is 4 bits. Bytes are two hex digits (00-FF).
+### Base 8: Octal
+Digits are 0-7. More compact that binary where one octal digit is 3 bits.
+### Base Conversions
+You want to convert the number you are changing to base 10 first. Then you can repeatedly divide by the base you want to the whatever power you need and then divide again until there is no remainder. To convert 100 to base 8, we know its 1(8^2) + 4(8^1) + 4(8^0) = 144base8
+### Base n Rationals
+Decimals can be represented past the "radix" (decimal) point by multiplying by negative powers of n.
+### Value vs Notation
+Decimals, binary, and hex are just ways to write numbers. Computers use binary to encode integers and perform arithmetic. Computers simply convert to decimal when outputting floats and ints.
+### Data Sizes
+Primitive number types used a fixed number of digits and are usually multiples of 8 as 8 bits = 1 byte. Chars are 1 byte, ints are 2 or 4 bytes, pointers are 4 or 9 bytes, floats are 4 bytes, and doubles are 8 bytes.
+### Big and Little-Endian
+Large data types consist of multiple bytes so you have to split them up to store them. Lets consider a large number like `AB10CD2F`. Big Endian stores the most significant byte at the smallest address `AB 10 CD 2F`. Little Endian stores the least significant byte at the smallest address `2F CD 10 AB`. Most network standards are big-endian and some file formats have byte-order marks.
+### Encoding Data
+We can encode things by using bits. For example a playing card has 4 suits, and 13 ranks. We can simply use one byte where 4 bits represent the rank 2 two bits represent the suit.
+### Negative Integers
+In writing we denote negative numbers with a negative sign `-`. We can designate a bit to be the signed like `4 = 0100` and `-4 = 1100` but this results in two zero values which is inconvenient for arithmetic `0 = 0000` and `-0 = 1000`.
+### 1s' Complement
+We can find -x by simply negating the bits of x. `001 = 1` `110 = -1`
+However, there are still two zeros and is inconvenient for arithmetic.
+### 2s' Complement
+We can make the most significant bit negative so that to find -x we simply negate the bits in x and add 1. This gets rid of the extra zero problem but there in an extra minimum value. Adding, subtracting, and multiplying works without changes and is now used on most computers. Remember that 0 signifies positive and 1 signifies negative. `100 = -4` `101 = -3` `110 = -2` `111 = -1` `000 = 0` `001 = 1` `010 = 2` `011 = 3`
+### Range of 2s' Complement
+For unsigned integers, k bits you can represent 2^k values. If they are natural numbers the range is `0 through 2^k-1`. However for 2s' complement the minimum value of x for k bits is `-2^(k-1)` and the maximum value is `2^(k-1) - 1`. This is because we add one to the negated value.
