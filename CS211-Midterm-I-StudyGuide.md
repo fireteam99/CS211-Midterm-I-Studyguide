@@ -15,8 +15,8 @@ x = x + y;
 **Assembly Language**
 
 ```nasm
-mov -0x8(%esp),
-%ebx add %ebx, %eax
+mov -0x8(%esp),%ebx
+add %ebx, %eax
 ```  
 **Machine Language**
 
@@ -96,7 +96,7 @@ The `break` statement forces an immediate exit from siwtch or loop and goes to t
 ### Functions
 Components include: Name, Return type, Parameers, and Body.
 
-```
+```c
 int Factorial(int n) {
 	int i;
 	int result = 1;
@@ -205,8 +205,9 @@ First allocate a 1d array of pointers corresponding to how many rows the array h
 ### Compilation
 **C Source code --> Pre-processor --> Compiler --> Assembly --> Assembler --> Relocatable Object --> Linker --> Executable**  
 Seperate compilation follows the same steps but links the multiple relocatable objects together at the end.
+## Datatypes
 ### Running on Hardware
-The ISA (Instruction Set Architecture) interfeces between the soft ware and hardware.
+The ISA (Instruction Set Architecture) interfaces between the soft ware and hardware.
 ### Base n Notation
 Numbers are written as a sequence of digits that are multiplied by a place value. For example in base 10, one hundred and twelve is written as: `1 * 10^2 + 1 * 10^1 + 2 * 10^0`
 ### Base 2: Binary
