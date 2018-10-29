@@ -408,3 +408,183 @@ The contents in the memory address stored in register eax are moved into registe
 
 ---
 **In general keep in mind that a register can either hold a data value, or a memory address.** Indirect addressing allows you to access data pointed to by memory address stored in registers.
+
+### Stack Operations
+`%esp` points to the address at the top of the stack. `pushl` and `pops` push contents onto or off the stack.
+
+```nasm
+pushl %eax 	; pushes item on stack into eax, then decrements esp
+popl %ebx 	; pops item from stack into eax, then increments esp
+```
+Note that the stack will grow downwards from a high to low memory addresses.
+### Swap Program Example 32 bit
+```c
+void swap (int *xp, int *yp)
+{
+	// set local var t0 to value at xp
+	int t0 = *xp;
+	// set local var t1 to value at yp
+	int t1 = *yp;
+	// set value at xp to t1
+	*xp = t1;
+	// set value at yp to t0
+	*yp = t0;
+}
+```
+In our conversion to assembly, lets look at the registers `%ecx, %edx, %eax, %ebx` and variables `yp, xp, t1, t2`.
+```nasm
+movl 12(%ebp),%ecx ; ecx = yp
+movl 8(%ebp),%edx ; edx = xp
+movl (%ecx),%eax ; eax = *yp (t1)
+movl (%edx),%ebx ; ebx = *xp (t0)
+movl %eax,(%edx) ; *xp = eax
+movl %ebx,(%ecx) ; *yp = ebx 
+```
+We can find our parameters yp and xp by using offsets 12 and 8 from the base pointer `%ebp`. Then using the `movl` command, we store the memory addresses into registers `%ecs` and `%edx`. After we move the values pointed to by the memory addresses within `%ecs` and `%edx` into registers `%eax` and `%ebx` respectively. Finally, we move the value stored in `%eax` into the what is pointed to by the address stored in `%edx` and the same with `%ebx` and `%ecx` - effectively completing our swap. 
+### Swap Program Example 64 bit
+```c
+void swap (int *xp, int *yp)
+{
+	// set local var t0 to value at xp
+	int t0 = *xp;
+	// set local var t1 to value at yp
+	int t1 = *yp;
+	// set value at xp to t1
+	*xp = t1;
+	// set value at yp to t0
+	*yp = t0;
+}
+```
+```nasm
+swap:
+	movl (%rdi), %edx ;store value of first param into %edx
+	movl (%rsi), %eax ;store value of second param into %eax
+	movl %eax, (%rdi) ;set value at rdi with %eax
+	movl %edx, (%rsi) ;set value at rsi with %edx
+	retq
+```
+In 64 bit, there are no stack operations because we have access to more registers, so we can simply store the parameters in registers instead of the stack.
+
+### IA32 Stack
+This is a region of memory that is managed as a stack. It grows towards lower addresses aka downwards. The register %esp indicates the lowest stack address aka the address of the top element of the stack.
+#### Pushing
+`pushl SRC` fetches the operand at SRC, decrements %esp by 4 and then writes the operand at address given by %esp.
+#### Popping
+`popl DEST` reads the operand at the address given by %esp, increments %esp by 4, and writes it to DEST.
+### Procedure Control Flow
+Uses the stack to support procedure call and return.
+#### Procedure call
+`call LABEL` Pushes return address on stack and jumps to LABEL.
+#### Return address value
+This is the address of instructions beyond the current function call.
+
+```nasm
+804854e:	e8 3d 06 00 00 call 8048b90 <main>
+8048553: 	50 pushl %eax 
+```
+In this example we can see that the return address is `0x8048553`.
+#### Procedure return
+`ret` will pop a address from the stack and then jump to that address.
+
+### Address Computation Instruction
+`leal` allows us to compute addresses using addressing mode without actually accessing memory. Follows the format: `leal SRC, DEST` where src is the address mode expression, and sets DEST to the address specified by SRC. This is useful when we want to set a regester to be the address of something and not to set a register to what the address of something points to.
+#### Comparison between movl and leal
+```c
+int x;
+int *p = &x;
+int a = = *x; 
+int *b = x;
+```
+Lets assume that the int x is stored at address `0x100F`.
+```nasm
+movl 0x100F,%ecx ; Stores the address of int x into ecx
+movl (%ecx), %eax ; Stores the value of x into eax
+leal (%ecx), %ebx ; Stores the address of x into ebx
+```
+### Arithmetic Operations
+**Instruction** 		**Computation**
+addl Src,Dest --> Dest = Dest + Src  
+subl Src,Dest --> Dest = Dest - Src  
+imull Src,Dest --> Dest = Dest * Src  
+sall Src,Dest --> Dest = Dest << Src (left shift)  
+sarl Src,Dest --> Dest = Dest >> Src (right shift)  
+xorl Src,Dest --> Dest = Dest ^ Src  
+andl Src,Dest --> Dest = Dest & Src  
+orl Src,Dest -->	Dest = Dest | Src  
+incl --> Dest Dest = Dest + 1  
+decl --> Dest Dest = Dest - 1  
+negl --> Dest Dest = - Dest  
+notl --> Dest Dest = ~ Dest  
+
+### Arith Program Example
+```c
+int arith(int x, int y, int z)
+{
+	int t1 = x+y;
+	int t2 = z+t1;
+	int t3 = x+4;
+	int t4 = y * 48;
+	int t5 = t3 + t4;
+	int rval = t2 * t5;
+	return rval; 
+}
+```
+```nasm
+arith:
+	pushl %ebp ;push the base pointer onto the stack
+	movl %esp,%ebp ;set the base pointer to be the stack pointer
+	movl 8(%ebp),%eax ;get param x from 8 offset from base pointer
+	movl 12(%ebp),%edx ;get param y from 12 offset from base pointer
+	leal (%edx,%eax),%ecx ;calculate x + y and store in ecx
+	leal (%edx,%edx,2),%edx ;multiplies edx by 3 
+	sall $4,%edx ;does a leftshift on edx by 4 to complete y * 48
+	addl 16(%ebp),%ecx ;adds t4 from memory to ecx
+	leal 4(%edx,%eax),%eax ;computes 4+t4+x
+	imull %ecx,%eax ;computes t5 * t2
+	movl %ebp,%esp ;sets the stack pointer to base pointer
+	popl %ebp ;pops the base pointer to execute next code
+	ret ;returns from function
+```
+### Control Flow/Conditionals
+Conditional branches implement control flow in higher level language such as `if/then`, `while`, and `for`. An unconditional branch is something like a `break` or `continue`.
+
+### Condition Codes
+#### Single Bit Registers
+* `CF` Carry Flag
+* `SF` Sign Flag
+* `ZF` Zero Glag
+* `OF` OVerflow Flag
+
+Condition Codes can either be set implicitly by almost all logic and arithmetic operations or explicitly using comparison operations. Note that condition codes are not set by the leal instruction.
+#### Implicit
+Lets do an example of implicit setting of condition codes. If we run the instruction `addl SRC, DEST`, the c equivlient of t = a + b, the **CF** will be set if there is a carry out from the most significant bit (used to detect unsigned overflow). **ZF** is set if `t == 0`. **SF** is set if `t < 0`. **OF** is set if there is a two's complement overflow `(a>0 && b>0 && t<0) || (a<0 && b<0 && t>=0)`.
+#### Explicit
+Here is an example of explicit setting of condition codes using the `testl SRC2, SRC1` instruction. Test essentially computes a&b but but throws away the result but sets the flags. **ZF** set when `a&b == b`. **SF** set when `a&b < 0`.
+### Jumping
+Jumps depend on condition codes as part of the syntax. They will check the appropriate flags to see if a jump should be performed.
+![alt jump_codes_table](resources/jump_codes.png)
+### Conditional Branch Example
+```c
+int max(int x, int y)
+{
+	if (x <= y)
+		return y;
+	else
+		return x;
+}
+```
+```nasm
+_max:
+	pushl %ebp ;pushes the base pointer onto the stack
+	movl %esp,%ebp ;sets the base pointer to be the stack pointer
+	movl 8(%ebp),%edx ;sends param x to edx
+	movl 12(%ebp),%eax ;send param y to eax
+	cmpl %eax,%edx ;compares x to y
+	jle L9 ;jumps to L9 if x is less than or equal to y
+	movl %edx,%eax ;sets return value to x
+L9:
+	movl %ebp,%esp ;sets stack pointer to base pointer
+	popl %ebp ;pops basepointer from stack
+	ret ;returns from function
+```
+Note that the value at %eax is the return value from the function due to the calling convention.
