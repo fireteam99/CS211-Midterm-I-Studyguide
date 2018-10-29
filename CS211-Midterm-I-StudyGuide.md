@@ -350,19 +350,61 @@ The operand (value found immediatly followign instruction) is encoded in 1, 2, o
 We use `%` to denote a register: `%eax`. We use the value stored in the source operand and another register as destination for value.
 
 ```nasm
-movl %eax, %ebx 	# Copies content of %eax into %ebx
-movl $0x4040, %eax 	# Immediate addressing, copies 0x4040 into %eax
-movl %eax, 0x0000f	# Absolute addressing, copies contents of %eax 
-# to memory location of 0x0000f
+movl %eax, %ebx 	; Copies content of %eax into %ebx
+movl $0x4040, %eax 	; Immediate addressing, copies 0x4040 into %eax
+movl %eax, 0x0000f	; Absolute addressing, copies contents of %eax to memory location of 0x0000f
 ```
 ### Indirect Mode Addressing
 We use the content of operand as an address. Designated with parentheses around operand. An offset can be specified as immediate mode. We can think of this as dereferencing a pointer. When using an offset, we can think of it as something similar to pointer arithmetic.
 
 ```nasm
 movl (%ebp), %eax
-# We use the value stored in %ebp as a memory address and then take the
-# value at that memory address and copy it into %eax
+; We use the value stored in %ebp as a memory address and then take the
+; value at that memory address and copy it into %eax
 movl -4(%ebp), %eax
-# We treat the value in #ebp as memory, find the address -4 away from it
-# and then we copy the contents at that ofsetted address into %eax
+; We treat the value in #ebp as memory, find the address -4 away from it
+; and then we copy the contents at that ofsetted address into %eax
 ```
+### Indexed Mode Addressing
+We can add the contents of two registers to get address of operand. This is particularily useful wen dealing with arrays because we can have one register hold the base address while the other one holds the index. Note that Index cannot be ESP.
+
+```nasm
+movl (%ebp, %esi), %eax ; Copy the value at (address = ebp + esi) into eax
+movl 8(%ebp, %esi), %eax ; Copy the value at (address = * + ebp +esi) into eax
+```
+### Scaled Indexed Mode Addressing
+On top of Index Mode Addressing, Scaled Index Mode Addressing allows us to multiply the second operand by the scale (1, 2, 4, or 8).
+
+```nasm
+movl 0x80(%ebx, %esi, 4), %eax
+; Copy the value at (address = ebx + esi * 4 + 0x80) into eax
+```
+This can be useful when dealing with structs or larger data types where we can scale by its size.
+### Address Computation Examples
+Given `%edx = 0xf000` and `%ecx = 0x100`, lets compute the following addressing expressions. 
+`0x8(%edx) = 0x8 + 0xf000 = 0xf008`  
+`(%edx,%ecx) = 0xf000 + 0x100 = 0xf100`  
+`(%edx,%ecx,4) = 0xf000 + 0x100 * 4 = 0xf400`  
+`0x80(,%edx,2) = 0x80 + 0 + 0xf000 * 2 = 0x1e080`
+### movl Operand Combinations
+#### Immediate
+##### Register
+The constant 0x4 is stored into register eax.  
+`movl $0x4,%eax` --> `temp = 0x4;`  
+##### Memory
+The constant -147 is stored into an memory address stored in register eax.  
+`movl $-147,(%eax)` --> `*p = -147;`
+#### Register
+##### Register
+The contents in register eax are stored into register edx.
+`movl %eax,%edx` --> `temp2 = temp1;`  
+##### Memory
+The contents in register eax are stored into the mem address stored in register edx.
+`movl %eax,(%edx)` --> `*p = temp;`
+#### Memory
+##### Register
+The contents in the memory address stored in register eax are moved into register edx.  
+`movl (%eax), %edx` --> `temp = *p;`
+
+---
+**In general keep in mind that a register can either hold a data value, or a memory address.** Indirect addressing allows you to access data pointed to by memory address stored in registers.
