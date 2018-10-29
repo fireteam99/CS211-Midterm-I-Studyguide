@@ -255,7 +255,7 @@ We need to chose an exponent (b^e) and mantissa (m) which are both integers. For
 ### IEEE 754 Floating-Point
 This is the most commonly used representation for floating-oint and defines single (32 bit), double (64 bit), and extended (80 bit) precisions. Some processors support half (16 bit) or quad (128 bit) too.
 ### Normal Values
-IEEE FP numbers have three parts: the sign `s`, exponenet `e`, and significand `m`. `s` is always one bit but `e` and `m` can depend on precision. Normal values are represented as `(-1)^s * m * 2^(e - bias(E)`, where 1 ≤ m < 2. The `bias(E) = 2^(E–1)–1`, where E is the number of bits in e where `e ≠ 0` and` e ≠ 2^(E–1)`(e.g., all ones).
+IEEE FP numbers have three parts: the sign `s`, exponenet `e`, and significand `m`. `s` is always one bit but `e` and `m` can depend on precision. Normal values are represented as `(-1)^s * m * 2^(e - bias(E))`, where 1 ≤ m < 2. The `bias(E) = 2^(E–1)–1`, where E is the number of bits in e where `e ≠ 0` and` e ≠ 2^(E–1)`(e.g., all ones). Note that it might be easier to memorize bias(E) as zero and then `E-1` ones. For example: `Bias(10) = 0111111111` or `Bias(6) = 011111`.
 ### Other Values
 Zero and denormal values are less than any normal value. This is when `(-1)^s * m * 2^(e - bias(E)`, where `0 ≤ m < 1`. The value is zero when `m = 0` and `e = 0`. Denormal if `m ≠ 0 and e = 0`. There are also nonfinite values `±∞` if `m = 0` and `e = 2^E –1` (all ones) and NaN if `m ≠ 0` and `e = 2^E –1` (all ones).
 ### Conversion to FP
