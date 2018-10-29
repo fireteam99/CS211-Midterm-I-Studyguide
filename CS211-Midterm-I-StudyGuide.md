@@ -237,3 +237,132 @@ However, there are still two zeros and is inconvenient for arithmetic.
 We can make the most significant bit negative so that to find -x we simply negate the bits in x and add 1. This gets rid of the extra zero problem but there in an extra minimum value. Adding, subtracting, and multiplying works without changes and is now used on most computers. Remember that 0 signifies positive and 1 signifies negative. `100 = -4` `101 = -3` `110 = -2` `111 = -1` `000 = 0` `001 = 1` `010 = 2` `011 = 3`
 ### Range of 2s' Complement
 For unsigned integers, k bits you can represent 2^k values. If they are natural numbers the range is `0 through 2^k-1`. However for 2s' complement the minimum value of x for k bits is `-2^(k-1)` and the maximum value is `2^(k-1) - 1`. This is because we add one to the negated value.
+### 2'z Complement Addition & Subtraction
+Addition is the same as unsigned binary addition but subtration requires us to invert the subtrahend and add. We also ignore the carries.
+### Multiplication
+It's the same thing as normal multiplication but just with ones and zeros. We only need to know add and shift to multiply.
+### Divison
+It's complicated.
+### Unsigned Ints in C
+Declared as `unsigned int i = 10;`. To cast just do `i = (unsigned) j;`. Casting will leave bits unchanged so `(unsigned) -1 = 2^k = 1` where k is the number of bits the integer has.
+### Bit Shifting
+The operators `<<` and `>>` shift an integer by some number of places to the left or right. Remember that shifting left is equivilent to multiplying by 2 `n << c = n × 2^c` and shifting right is equivilent to dividing by 2 `n << c = n × 2^c`.
+## Floating Point
+### Scientific Notation
+A more compact way of writing long decimal numbers by distinguishing magnitude from precision. In base 10 we have `1,250,000 = 1.25 × 10^6` and in base 2 we have `0.00101 = 1.01 × 2^-3`.
+### Fixed-Point Numbers
+We need to chose an exponent (b^e) and mantissa (m) which are both integers. For example for 10.50 `m = 1050 ` and `b^e = 10^-2`. We can simply use integer operations to add and subtract. To multiply we use integer multiplication and then we multuply by b^e. For example: `(45 × 10-2)(1000 × 10-2) = (45 × 1000 × 10-2) × 10-2 = 450 × 10-2`. Remember that values closer to 0 are more precise because floating point numbers get more dense.
+### IEEE 754 Floating-Point
+This is the most commonly used representation for floating-oint and defines single (32 bit), double (64 bit), and extended (80 bit) precisions. Some processors support half (16 bit) or quad (128 bit) too.
+### Normal Values
+IEEE FP numbers have three parts: the sign `s`, exponenet `e`, and significand `m`. `s` is always one bit but `e` and `m` can depend on precision. Normal values are represented as `(-1)^s * m * 2^(e - bias(E)`, where 1 ≤ m < 2. The `bias(E) = 2^(E–1)–1`, where E is the number of bits in e where `e ≠ 0` and` e ≠ 2^(E–1)`(e.g., all ones).
+### Other Values
+Zero and denormal values are less than any normal value. This is when `(-1)^s * m * 2^(e - bias(E)`, where `0 ≤ m < 1`. The value is zero when `m = 0` and `e = 0`. Denormal if `m ≠ 0 and e = 0`. There are also nonfinite values `±∞` if `m = 0` and `e = 2^E –1` (all ones) and NaN if `m ≠ 0` and `e = 2^E –1` (all ones).
+### Conversion to FP
+In single precision, E = 8, M = 23 (mantissa bits). Lets convert `5.625`. First we rewrite it in binary: `101.101`. Then rewrite in scientific notation: `1.01101 * 2^2`. Now we solve for `e - bias(E) = 2` and we get `bias(E) = 127` so `e = 129 = 10000001`. We then drop the integer part of m and extend to M bits: ` 01101000000000000000000`. Final answer: `0 100000001 01101000000000000000000`.
+## Assembly
+### Programming Meets Hardware
+High-Level Language Program --> Assembly Language Program --> Machine Language Program
+### Performance with PRgraoms
+1. Program: Data structures + algorithms
+2. Compiler Translates code
+3. Instruction set architecture
+4. Hardware Implementation
+
+### Instruction Set Architecture (ISA)
+ISA is a set of instructions that the CPU can execute. It also gives information on the state of the system regarding registers, memory state, and program counter. Example: what instruction to execute next, how many and how large registers are, and how we specify memory addresses.
+### IA32 (X86 ISA)
+There are many assembly languages as they are processor-specific. Some examples are IA32, IA64, PowerPC, and MIPS.
+### X86 Evolution
+8086 – 1978 – 29K transistors – 5-10MHz  
+I386 – 1985 – 275K transistors – 16-33 MHz  
+Pentium4 – 2005 – 230M transistors – 2800-3800 MHz  
+Haswell – 2013 – > 2B transistors – 3200-3900 MHz  
+Some added features include larger caches, multiple cores and support for data parrallelism (SIMD, and AVX extensions.
+### CISC vs RISC
+CISC (complex instruction set) are usex by x86 have more complicated instructions but reduce code size and have a more complex hardware implenetation. RISC (reduce instruction set) like ARM have simpler instructions but large code size, and simpler hardware implmentation.
+Note that CISC implementation like x86 are good for backwards compatability but bad for taking advantage of hardware advances.
+### Assembly Programming
+We use assembly because it interfaces closely with hardware. It is better than binary because it is much easier for us to read and we can use relative instead of absolute addresses.
+### Memory
+The main memory is a massive array of bits where we can store and read information from.
+### Processor: ALU and Registers
+The ALU performs arithmetic and logical operations while the registers act as temporary storage for information we need to work with.
+### C, Assembly Codem and Machine Code
+Suppose we have the following c code:
+
+```c
+int accum;
+int sum(int x, int y)
+{
+	int t = x + y;
+	accum += t;
+	return t;
+}
+```
+We can convert it to assembly using `gcc -O1 -m32 –S code.c`.
+
+```nasm
+sum:
+	push %ebp
+	movl %esp, %ebp
+	movl 12(%ebp), %eax
+	addl 8(%ebp), %eax
+	addl %eax, accum
+	popl %ebp
+	ret
+```
+We can get machine code using `objdump –d code.o`.
+
+```
+0000000 <sum>:
+ 0: 55 						push %ebp
+ 1: 89 e5 					mov %esp,%ebp
+ 3: 8b 45 0c 				mov 0xc(%ebp),%eax
+ 6: 03 45 08 				add 0x8(%ebp),%eax
+ 9: 01 05 00 00 00 00 		add %eax, accum
+ f: 5d 						pop %ebp
+ 10: 						c3 ret
+```
+### Assembly Characteristics
+#### Data Types
+Assembly has no real data types. There is only integer data of 1, 2, or 4 bytes of data values and address (untyped pointers), Floating point data of 4, 8, or 10 bytes, and contigiously allocated bytes in memory that are equivilent to arrays and structures. 
+#### Type Checking
+Note that there is no type checking so there is no protection from misinterpretation of data.
+#### Operations
+The only operations allowed are arithmetic function on register or memory data, transfering data from memory and register, and transfer control in the form of unconditional jumps and conditional branches.
+### x86 Characteristics
+There are variable length instructions from 1 to 15 bytes, can address memory directly in most instructions, and uses Little-Endian format.
+### Instruction Format
+Generally we have `opcode operands`. Opcodes are short memonics for instructions purpose like `movb` or `addl`. Operands can be immediate, register, or memory. The number of operands passed depend on the command. For example: `movl %ebx, (%ecx)`.
+### Machine Representation
+`| OPCODE | ADDRESSING MODE | OTHER BYTES |`  
+Assembly instructions are translated into a sequences of 1-15 bytes where the first part is the binary opcode and then instruction for the addressing mode which include the type of operands and how to interpret the operands. Some instructions like `pushl` are single byte because their addressing mode are implicitly specified.
+### x86 Regusters
+General purpose registers are 32 bits with 16 and 8 bit subregisters contained within. There are data registers (EAX, EBX, ECX, EDX) and pointer/index registers (EBP, ESP, EIP,ESI,EDI), and segment registers (CS, DS, SS, ES).
+### Data Format
+We have **Byte**: 8 bit, **Word**: 18 bits, **Double Word**: 32 bits, **Quad Word** 64 bits. Instructions can operate on any data size: `movl` on double word, `movw` on word, `movb` on byte.
+### MOV Instruction
+Follows the format `Mov SRC, DEST` where SRC and DEST are operands. SRC can be the contents of register, memory location, constant, or a label. DEST is a register or location in memory. MOV is used to copy data from constant to register, memory to register, register to memory, or register to register. You cannot copy memory to memory in a single instruction.
+### Immediate Addressing
+The operand (value found immediatly followign instruction) is encoded in 1, 2, or 4 bytes. There must be a `$` in front of the immediate operand. For example `movl $0x4040, %eax` moves the hexidecimal 4040 into register eax.
+### Register Mode Addressing
+We use `%` to denote a register: `%eax`. We use the value stored in the source operand and another register as destination for value.
+
+```nasm
+movl %eax, %ebx 	# Copies content of %eax into %ebx
+movl $0x4040, %eax 	# Immediate addressing, copies 0x4040 into %eax
+movl %eax, 0x0000f	# Absolute addressing, copies contents of %eax 
+# to memory location of 0x0000f
+```
+### Indirect Mode Addressing
+We use the content of operand as an address. Designated with parentheses around operand. An offset can be specified as immediate mode. We can think of this as dereferencing a pointer. When using an offset, we can think of it as something similar to pointer arithmetic.
+
+```nasm
+movl (%ebp), %eax
+# We use the value stored in %ebp as a memory address and then take the
+# value at that memory address and copy it into %eax
+movl -4(%ebp), %eax
+# We treat the value in #ebp as memory, find the address -4 away from it
+# and then we copy the contents at that ofsetted address into %eax
+```
