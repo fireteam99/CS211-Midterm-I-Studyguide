@@ -258,8 +258,17 @@ This is the most commonly used representation for floating-oint and defines sing
 IEEE FP numbers have three parts: the sign `s`, exponenet `e`, and significand `m`. `s` is always one bit but `e` and `m` can depend on precision. Normal values are represented as `(-1)^s * m * 2^(e - bias(E))`, where 1 ≤ m < 2. The `bias(E) = 2^(E–1)–1`, where E is the number of bits in e where `e ≠ 0` and` e ≠ 2^(E–1)`(e.g., all ones). Note that it might be easier to memorize bias(E) as zero and then `E-1` ones. For example: `Bias(10) = 0111111111` or `Bias(6) = 011111`.
 ### Other Values
 Zero and denormal values are less than any normal value. This is when `(-1)^s * m * 2^(e - bias(E)`, where `0 ≤ m < 1`. The value is zero when `m = 0` and `e = 0`. Denormal if `m ≠ 0 and e = 0`. There are also nonfinite values `±∞` if `m = 0` and `e = 2^E –1` (all ones) and NaN if `m ≠ 0` and `e = 2^E –1` (all ones).
-### Conversion to FP
-In single precision, E = 8, M = 23 (mantissa bits). Lets convert `5.625`. First we rewrite it in binary: `101.101`. Then rewrite in scientific notation: `1.01101 * 2^2`. Now we solve for `e - bias(E) = 2` and we get `bias(E) = 127` so `e = 129 = 10000001`. We then drop the integer part of m and extend to M bits: ` 01101000000000000000000`. Final answer: `0 100000001 01101000000000000000000`.
+### Conversion from Decimal to FP
+Before we begin we know E stands for bits in the exponent and M stands for bits in the mantissa. In IEEE single precision, the exponent has E = 8 bits and the mantissa has M = 23 bits. Lets convert `5.625` to floating point. This number is positive so we know our sign bit is going to `0`. Next we rewrite it in binary: `101.101`. Then rewrite in binary scientific notation: `1.01101 * 2^2`. In order to find the stored exponent we must first add our bias which can be found using the formula `2^(E-1) - 1`. Plugging in, we have `2^(8-1)-1 = 127` and we complete the calculation adding it to our exponent `2 + 127 = 129`. In the last step, we convert `129` to binary which is `10000001`. We then drop the integer part of m and extend to M bits: `1.01101 --> 0.1101 --> 01101000000000000000000`. Now that we have s, e, and m, just put them in order to get: `0 100000001 01101000000000000000000`. [Here is a good tutorial for decimal to FP.](https://www.youtube.com/watch?v=tx-M_rqhuUA&t=6s)
+### Conversion from FP to Decimal
+The decimal number is given in the following formula: `(-1)^s * (1 + m) * 2^(e - Bias(E))`. Lets try to convert the floating point number `1000 1000 1000 1000 1000 0000 0000 0000` to decimal. Off the bat we know our sign bit `s = 1`, our exponent `e = 0001 0001`, and our mantissa is the remaining `m = 0001 0001 0000 0000 0000 000`. Now we need to convert our exponent to it's actual form by subtracting the bias. In this case our bias is 127 so `0002 0001 = 17 --> 17 - 127 = -110` so e = -110. Last we convert `0001 0001 0000 0000 0000 000` tp base 10 which is `0.06640625`. Finally, we plut in all of the numbers into the formula and get `(-1)^1 * (1 + 0.06640625) * 2^(-110) = -1.06640625 * 2^-110`. So our final answer is **-1.06640625 * 2^-110**. [Here is a good tutorial for FP to decimal.](https://www.youtube.com/watch?v=4DfXdJdaNYs)
+### FP in general
+Somethings to be aware of...
+* The single digit in front of the radix is dropped in the mantissa as it is implied by the exponent.
+* If the dropped digit is 1 then value is normal if 0 then value is denormal
+* If the exponent is all 0s but not the mantissa, the number is denormal
+* If the exponent is all 1s and the mantissa is all 0s, number is infinity
+* If the exponent is all 1s but mantissa is not all 0s, number is NaN
 ## Assembly
 ### Programming Meets Hardware
 High-Level Language Program --> Assembly Language Program --> Machine Language Program
