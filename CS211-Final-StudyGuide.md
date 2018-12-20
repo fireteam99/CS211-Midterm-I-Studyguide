@@ -897,3 +897,87 @@ Built using transistors that use discrete values in the form of voltage.
 
 ### Universal Gates
 Any gate can be implemented using either NOR or NAND gates.
+
+### More than 2 Inputs
+AND/OR can take any number of inputs. AND = 1 if all inputs are 1 and OR = 1 if any of the inputs are 1.
+
+### Circuit Design
+Steps to create a circuit:
+
+1. Think about what the circuit is designed to do
+2. Create a truth table for the circuit
+3. Derive boolean expression from truth table
+4. Simplify boolean expression
+5. Build circuit given boolean expression
+
+### Converting Truth Table to Boolean Expression
+When given a truth table, isolate the rows where the output is true, and AND all of your inputs while negating any input that has an input value of 0. ![alt tt-expr](https://sub.allaboutcircuits.com/images/14065.png)  
+Often times the boolean expression is not in the simplest form so we can either use boolean algebra or k-maps to reduce it.
+![alt expr-simp](https://sub.allaboutcircuits.com/images/14066.png)  
+Finally, we can create the circuit by ANDing AB, BC, AC, and then ORing the results together. ![alt circuit](https://sub.allaboutcircuits.com/images/04366.png)
+
+### Decoder
+Decoders always have n inputs, and 2^n outputs. It allows you to determine which combination of the inputs are true. Note the outputs take the form of a reversed truth table. ![alt decoder](https://image.slidesharecdn.com/deppt-151120153445-lva1-app6892/95/encoder-and-decoder-in-digital-electronics-5-638.jpg?cb=1448033733)  
+It's possible to create larger decoders from smaller decoders.
+![alt decoder-larger](https://i.stack.imgur.com/b4lfd.png)
+
+### Encoder
+The encoder is the opposite of the decoder as it converts m bit input to n bit output where n <= m.
+
+### Multiplexer
+Contain n-bit selector and 2^n inputs, with one output. Output is equal to one of the inputs based on the selector.
+
+---
+4:1 Multiplexer
+ ![alt mux](https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Mux_from_3_state_buffers.png/200px-Mux_from_3_state_buffers.png)
+ 
+### 2 Variable K-Maps
+K-maps allow us to simplify boolean expressions faster than using boolean algebra. We create a 2-d map that are contain squares that represent each minterm. The squares are then marked according to the values of the minterm derived from a truth table. In order to simplify the expression, we circle any two 1s that are next to each other vertically or horizontally. This gives us the expression of the variable that did not change across the two boxes. ![alt 2varkmap](https://digital-electronics.weebly.com/uploads/8/6/1/3/8613305/2x2kmap.gif)  
+In the left box, note that we have 1s in `A'B'` and `A'B`. This means we can simplify the expression to just be `A'`. Conceptually that is based on the boolean algebra law `P.P' = 1`. In the right box we have `A'B` and `AB`. This time the expression simplifies to `B`. 
+ 
+### 3 Variable K-Maps
+![alt 3varkmap](https://electronicspost.com/wp-content/uploads/2015/05/161.png)  
+Notice that with three variables we have B and C on the top. The progression of `00 --> 01 --> 11 --> 10` is called "grey code" where there is only a single change of 1s and 0s each time. This is neccessary so the k-map works correctly. Also, note that the **rectangles of 1s must be a power of 2** to be allowed and can "wrap around" the sides.
+
+-
+In the above map we have `A'B'C'` and `A'B'C'` where `A'B'` stay constant. We also have `ABC` and `ABC'` where `AB` stay constant. Our expression gets simplified from `A'B'C' + A'B'C + ABC + ABC'` to just `A'B' + AB'`.
+
+### 4 Variable K-Maps
+Four variable K-Maps are similar to the 3 and 2 variable ones but you can now create boxes from the corners in a diamond shape from wrapping around.
+![alt 4varkmap](https://sub.allaboutcircuits.com/images/14124.png)  
+Notice in this example there are two right answers depending how you decide to box square (11, 01).
+
+### FSM to Digital Circit
+Finite state machines consist of a state register and combinational logic.  
+**Step 1**: Draw out the FSM as a state diagram.  
+![alt state-diagram](https://sub.allaboutcircuits.com/images/44001.png) 
+**Step 2**: Replace the state names with binary numbers.  
+We have 3 states so we can represent them with 2 bits. `00` = initial standby, `01` = activate pulse, `10` = wait loop.
+![alt binnames](https://sub.allaboutcircuits.com/images/44002.png)  
+**Step 3**: Fill in state table.
+![alt statetable](https://sub.allaboutcircuits.com/images/44003.png)
+We use our diagram to figure to map each current state to the next state based on an input of 0 or 1. We also need to encode our output so for our case we use 0 and 1.  
+  
+**Step 4**: Using K-Maps we can figure out the expressions for the next state transition and outputs. For present state to next state, we need to have two 3-variable K-Maps. First for A, B, and I mapping to Anext, and second for A, B, and I mapping to Bnext. Then for the output, we have A, B mapping to Y. ![alt statekmaps](resources/fsm-kmaps.png)
+
+**Step 5**: Prepare to Implemnt Circuit.
+Complete circuit will take this form:
+![alt generic](resources/generic_fsm_circuit.png)
+
+**Step 6**: Assume that we are using a D-FF.  
+Implements the state register.
+![alt dff](resources/d-ff.png)
+
+**Step 7**: Implement Next State Circuit.
+We need to implement `A'BI' + AB'I` for Anext and `A'B'I` for Bnext.
+![alt next-state-logc](resources/next-state-logic.png)
+
+**Step 8**: Implement Output Circuit.
+We meed to implement `A'B` for Y.
+![alt output-logc](resources/output-logic.png)
+
+**Step 9**: Put everything together.
+![alt fin-logc](resources/finished-logic.png)
+
+## Caches
+
