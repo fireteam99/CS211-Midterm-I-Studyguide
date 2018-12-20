@@ -1,9 +1,9 @@
 # CS211 Midterm I Study Guide
 ## Recent Trends In Hardware
 ### Main Components In Computer
-Include: Cpu, Memory, Bus, I/O Devices like keyboards, graphics, neworking, and storage.
+Include: Cpu, Memory, Bus, I/O devices like keyboards, graphics, neworking, and storage.
 ### Von Neumann Model
-Computers are seperated into three parts: memory, control unit, and arithmetic and logic unit. Moery stores data and instructions. The control unit fetches further instructions. the arithmetic and logic units do operations based on the instrucitons passed.
+Computers are seperated into three parts: memory, control unit, and arithmetic and logic unit. Memory stores data and instructions. The control unit fetches further instructions. The arithmetic and logic units do operations based on the instructions passed.
 ### Basic CPU Function
 Fetch --> Decode --> Execute
 ### Running on Hardware
@@ -26,7 +26,7 @@ add %ebx, %eax
 ### Operating System
 Provides essential services to programs running on hardware such as virtual memory, multitasking, etc...
 ### Moore's Law
-An observation that the number of transistors on chip double every 18 month. Can also be seen in processor speed, memory capacity, and disk capacity, which doubles 18 months, two years and every year, relativly speaking.
+An observation that the number of transistors on chip double every 18 months. Can also be seen in processor speed, memory capacity, and disk capacity, which doubles 18 months, two years and every year, relativly speaking.
 ## The C Language
 ### Compared to Java
 Java source code is compiled into byte code, runs in the jvm and finally on the hardware and OS. C is compiled and run in the hardware and OS.
@@ -39,7 +39,7 @@ There exits: ***char***, ***int***, ***float***, ***double***, with modifiers **
 ### Arithmetic Operatiors
 Contains `*, /, %, +, -, ++, --`. Remember that `x++` changes the value after it is used and `++x` changes the value before it is used. Same with `x--` and `--x`.
 ### Relational Operators
-Include: `>, >=, <. <=, ==, !=`. The result is 1 (TRUE) or 0 (FALSE).
+Includes: `>, >=, <. <=, ==, !=`. The result is 1 (TRUE) or 0 (FALSE).
 ### Bit Operators
 Contains the symbols: `~` complement used as `~x`, `&` bit AND used as `x & y`, and `|` bit OR used as `x | y`.
 ### Expressions and Assignments
@@ -60,10 +60,10 @@ if (condition 1) {
 ```
 
 ### Switch Statements
-Evaluates an integer expression and after finding the 1st case with matching contatcy executes statements until encountering break or end of switch. Remember to include a default case.
+Evaluates an integer expression and after finding the 1st case with matching case and executes statements until encountering break or end of switch. Remember to include a default case.
 
 ```c
-switch(expr) {
+switch (expr) {
     case 1:
         statement 1;
     case 2:
@@ -92,9 +92,9 @@ do {
 ```
 
 ### Specialized Go-to's
-The `break` statement forces an immediate exit from siwtch or loop and goes to the code following that switch or loop. The `continue` statements skips the rest of the code in the body of a loop and restarts the loop.
+The `break` statement forces an immediate exit from switch or loop and goes to the code following that switch or loop. The `continue` statements skips the rest of the code in the body of a loop and restarts the loop.
 ### Functions
-Components include: Name, Return type, Parameers, and Body.
+Components include: Name, Return type, Parameters, and Body.
 
 ```c
 int Factorial(int n) {
@@ -113,7 +113,7 @@ In c, function prototypes are required when you use a function before you have i
 ### Input and Output
 Contained in `stdio.h`. Two common functions are `printf("%d\n", counter);` and `scanf("%d", &startPoint);`.
 ### Memory
-C's memory model is the same as the underlying virtual memory system. Variables are simply names for contiguous sequences of bytes. Variable names are equivelent to memory addresses.
+C's memory model is the same as the underlying virtual memory system. Variables are simply names for contiguous sequences of bytes. Variable names are equivalent to memory addresses.
 ### Pointers
 Pointers are a variable that store an address. Declared as `type *pointer_name`. `*` is the dereference operator which ives the value stored at the address pointed to: `*p`. `&` gives the address of a variable: `&v`.
 ### Null Pointer
@@ -122,7 +122,7 @@ NULL is a predefined constant that contains a value that is an illegal address s
 Note that C is not strongly typed.
 ### Arrays
 Arrays are contiguous sequences of data items of the same type. Declaration: `type name[amount]` --> `int nums[10]`
-Array indexs always start at zero. C compiler and runtime does not check for boudaries.
+Array indexes always start at zero. C compiler and runtime does not check for boundaries.
 ### Array Storage
 Elements in array are stored contigously in memory so if you know where the first item is and the length, you can access every element using offsets.
 ### Arrays and Pointers
@@ -136,7 +136,7 @@ Arrays are basically syntactic sugar for pointers.
 ### Pointer Arithmetic
 You can increment or decrement pointers by an offset to access memory adjacent to the pointer. Don't go out of bounds.
 ### Passing Arrays as Arguments
-Arrays are baessed by reference but array items are passed by value. This means there will be pointer decay and the size of the the array is lost when passed to a function.
+Arrays are passed by reference but array items are passed by value. This means there will be pointer decay and the size of the array is lost when passed to a function.
 ### Common Array Errors in C
 Do not overrun array limits due to no out of bounds checking and the size of an array must be known at compile time.
 ### Strings
@@ -166,7 +166,7 @@ Now we can declare a person by simply doing `Person john;`.
 ### Pointer to Structs
 To declare a pointer to a struct: `struct Person *john;`. To access members of struct we can use the dot operator `.` and dereference it `(*person).name` or just the special arrow operator `->` directly `person->name `.
 ### Dynamic Allocation
-We need dynamic memory allocation when we don't how much data we have during compile time. These varibles are declared on the heap rather than the stack.
+We need dynamic memory allocation when we don't how much data we have during compile time. These variables are declared on the heap rather than the stack.
 ### Memory Management 101
 When a function call is performed the run-time system allocates resources such as local vars, arguments, and results. The state associated with a particular function is called an ***activation record***.
 ### Allocating on the Stack
@@ -227,16 +227,16 @@ Primitive number types used a fixed number of digits and are usually multiples o
 ### Big and Little-Endian
 Large data types consist of multiple bytes so you have to split them up to store them. Lets consider a large number like `AB10CD2F`. Big Endian stores the most significant byte at the smallest address `AB 10 CD 2F`. Little Endian stores the least significant byte at the smallest address `2F CD 10 AB`. Most network standards are big-endian and some file formats have byte-order marks.
 ### Encoding Data
-We can encode things by using bits. For example a playing card has 4 suits, and 13 ranks. We can simply use one byte where 4 bits represent the rank 2 two bits represent the suit.
+We can encode things by using bits. For example a playing card has 4 suits, and 13 ranks. We can simply use one byte - where 4 bits represent the rank and 2 two bits which represent the suit.
 ### Negative Integers
 In writing we denote negative numbers with a negative sign `-`. We can designate a bit to be the signed like `4 = 0100` and `-4 = 1100` but this results in two zero values which is inconvenient for arithmetic `0 = 0000` and `-0 = 1000`.
 ### 1s' Complement
 We can find -x by simply negating the bits of x. `001 = 1` `110 = -1`
 However, there are still two zeros and is inconvenient for arithmetic.
 ### 2s' Complement
-We can make the most significant bit negative so that to find -x we simply negate the bits in x and add 1. This gets rid of the extra zero problem but there in an extra minimum value. Adding, subtracting, and multiplying works without changes and is now used on most computers. Remember that 0 signifies positive and 1 signifies negative. `100 = -4` `101 = -3` `110 = -2` `111 = -1` `000 = 0` `001 = 1` `010 = 2` `011 = 3`
+We can make the most significant bit negative so that to find -x we simply negate the bits in x and add 1. This gets rid of the extra zero problem but there in an extra minimum value. Adding, subtracting, and multiplying works without changes so it is used on most computers. Remember that in the first bit, 0 signifies positive and 1 signifies negative. `100 = -4` `101 = -3` `110 = -2` `111 = -1` `000 = 0` `001 = 1` `010 = 2` `011 = 3`
 ### Range of 2s' Complement
-For unsigned integers, k bits you can represent 2^k values. If they are natural numbers the range is `0 through 2^k-1`. However for 2s' complement the minimum value of x for k bits is `-2^(k-1)` and the maximum value is `2^(k-1) - 1`. This is because we add one to the negated value.
+For unsigned integers, k bits you can represent 2^k values. If they are natural numbers the range is `0 through 2^k-1`. However for 2s' complement the minimum value of x for k bits is `-2^(k-1)` and the maximum value is `2^(k-1) - 1`. This is because we add one to a two's complement number.
 ### 2'z Complement Addition & Subtraction
 Addition is the same as unsigned binary addition but subtration requires us to invert the subtrahend and add. We also ignore the carries.
 ### Multiplication
@@ -255,26 +255,28 @@ We need to chose an exponent (b^e) and mantissa (m) which are both integers. For
 ### IEEE 754 Floating-Point
 This is the most commonly used representation for floating-oint and defines single (32 bit), double (64 bit), and extended (80 bit) precisions. Some processors support half (16 bit) or quad (128 bit) too.
 ### Normal Values
-IEEE FP numbers have three parts: the sign `s`, exponenet `e`, and significand `m`. `s` is always one bit but `e` and `m` can depend on precision. Normal values are represented as `(-1)^s * m * 2^(e - bias(E))`, where 1 ≤ m < 2. The `bias(E) = 2^(E–1)–1`, where E is the number of bits in e where `e ≠ 0` and` e ≠ 2^(E–1)`(e.g., all ones). Note that it might be easier to memorize bias(E) as zero and then `E-1` ones. For example: `Bias(10) = 0111111111` or `Bias(6) = 011111`.
+IEEE FP numbers have three parts: the sign `s`, exponenet `e`, and significand `m`. `s` is always one bit but `e` and `m` depend on the precision. Normal values are represented as `(-1)^s * m * 2^(e - bias(E))`, where 1 ≤ m < 2. The `bias(E) = 2^(E–1)–1`, where E is the number of bits in e where `e ≠ 0` and` e ≠ 2^(E–1)`(e.g., all ones). Note that it might be easier to memorize bias(E) as a single zero and then `E-1` ones. For example: `Bias(10) = 0111111111` or `Bias(6) = 011111`.
 ### Other Values
-Zero and denormal values are less than any normal value. This is when `(-1)^s * m * 2^(e - bias(E)`, where `0 ≤ m < 1`. The value is zero when `m = 0` and `e = 0`. Denormal if `m ≠ 0 and e = 0`. There are also nonfinite values `±∞` if `m = 0` and `e = 2^E –1` (all ones) and NaN if `m ≠ 0` and `e = 2^E –1` (all ones).
+Zero and denormal values are less than any normal value. This is when `(-1)^s * m * 2^(e - bias(E)`, where `0 ≤ m < 1`. The value is zero when `m = 0` and `e = 0`. Denormal if `m ≠ 0 and e = 0`. Denormal numbers are extremely small. There are also nonfinite values `±∞` if `m = 0` and `e = 2^E –1` (all ones) and NaN if `m ≠ 0` and `e = 2^E –1` (all ones).
 ### Conversion from Decimal to FP
 Before we begin we know E stands for bits in the exponent and M stands for bits in the mantissa. In IEEE single precision, the exponent has E = 8 bits and the mantissa has M = 23 bits. Lets convert `5.625` to floating point. This number is positive so we know our sign bit is going to `0`. Next we rewrite it in binary: `101.101`. Then rewrite in binary scientific notation: `1.01101 * 2^2`. In order to find the stored exponent we must first add our bias which can be found using the formula `2^(E-1) - 1`. Plugging in, we have `2^(8-1)-1 = 127` and we complete the calculation adding it to our exponent `2 + 127 = 129`. In the last step, we convert `129` to binary which is `10000001`. We then drop the integer part of m and extend to M bits: `1.01101 --> 0.1101 --> 01101000000000000000000`. Now that we have s, e, and m, just put them in order to get: `0 100000001 01101000000000000000000`. [Here is a good tutorial for decimal to FP.](https://www.youtube.com/watch?v=tx-M_rqhuUA&t=6s)
 ### Conversion from FP to Decimal
-The decimal number is given in the following formula: `(-1)^s * (1 + m) * 2^(e - Bias(E))`. Lets try to convert the floating point number `1000 1000 1000 1000 1000 0000 0000 0000` to decimal. Off the bat we know our sign bit `s = 1`, our exponent `e = 0001 0001`, and our mantissa is the remaining `m = 0001 0001 0000 0000 0000 000`. Now we need to convert our exponent to it's actual form by subtracting the bias. In this case our bias is 127 so `0002 0001 = 17 --> 17 - 127 = -110` so e = -110. Last we convert `0001 0001 0000 0000 0000 000` tp base 10 which is `0.06640625`. Finally, we plut in all of the numbers into the formula and get `(-1)^1 * (1 + 0.06640625) * 2^(-110) = -1.06640625 * 2^-110`. So our final answer is **-1.06640625 * 2^-110**. [Here is a good tutorial for FP to decimal.](https://www.youtube.com/watch?v=4DfXdJdaNYs)
+The decimal number is given in the following formula: `(-1)^s * (1 + m) * 2^(e - Bias(E))`. Lets try to convert the floating point number `1000 1000 1000 1000 1000 0000 0000 0000` to decimal. Off the bat we know our sign bit `s = 1`, our exponent `e = 0001 0001`, and our mantissa is the remaining `m = 0001 0001 0000 0000 0000 000`. Now we need to convert our exponent to it's actual form by subtracting the bias. In this case our bias is 127 so `0002 0001 = 17 --> 17 - 127 = -110` so e = -110. Last we convert `0001 0001 0000 0000 0000 000` tp base 10 which is `0.06640625`. Finally, we put all of the numbers into the formula and get `(-1)^1 * (1 + 0.06640625) * 2^(-110) = -1.06640625 * 2^-110`. So our final answer is **-1.06640625 * 2^-110**. [Here is a good tutorial for FP to decimal.](https://www.youtube.com/watch?v=4DfXdJdaNYs)
 ### FP in general
-Somethings to be aware of...
+*Some things to be aware of...*
+
 * The single digit in front of the radix is dropped in the mantissa as it is implied by the exponent.
 * If the dropped digit is 1 then value is normal if 0 then value is denormal
 * If the exponent is all 0s but not the mantissa, the number is denormal
-* If the exponent is all 1s and the mantissa is all 0s, number is infinity
+* If the exponent is all 1s and the mantissa is all 0s, number is positive or negative infinity based on the sign bit
 * If the exponent is all 1s but mantissa is not all 0s, number is NaN
+
 ## Assembly
 ### Programming Meets Hardware
 High-Level Language Program --> Assembly Language Program --> Machine Language Program
-### Performance with PRgraoms
+### Performance with Programs
 1. Program: Data structures + algorithms
-2. Compiler Translates code
+2. Compiler translates code
 3. Instruction set architecture
 4. Hardware Implementation
 
@@ -297,7 +299,7 @@ We use assembly because it interfaces closely with hardware. It is better than b
 The main memory is a massive array of bits where we can store and read information from.
 ### Processor: ALU and Registers
 The ALU performs arithmetic and logical operations while the registers act as temporary storage for information we need to work with.
-### C, Assembly Codem and Machine Code
+### C, Assembly Code and Machine Code
 Suppose we have the following c code:
 
 ```c
@@ -345,8 +347,8 @@ There are variable length instructions from 1 to 15 bytes, can address memory di
 ### Instruction Format
 Generally we have `opcode operands`. Opcodes are short memonics for instructions purpose like `movb` or `addl`. Operands can be immediate, register, or memory. The number of operands passed depend on the command. For example: `movl %ebx, (%ecx)`.
 ### Machine Representation
-`| OPCODE | ADDRESSING MODE | OTHER BYTES |`  
-Assembly instructions are translated into a sequences of 1-15 bytes where the first part is the binary opcode and then instruction for the addressing mode which include the type of operands and how to interpret the operands. Some instructions like `pushl` are single byte because their addressing mode are implicitly specified.
+`[ OPCODE | ADDRESSING MODE | OTHER BYTES ]`  
+Assembly instructions are translated into a sequences of 1-15 bytes where the first part is the binary opcode and then instruction for the addressing mode which include the type of operands and how to interpret the operands. Some instructions like `push` are single byte because their addressing mode are implicitly specified.
 ### x86 Regusters
 General purpose registers are 32 bits with 16 and 8 bit subregisters contained within. There are data registers (EAX, EBX, ECX, EDX) and pointer/index registers (EBP, ESP, EIP,ESI,EDI), and segment registers (CS, DS, SS, ES).
 ### Data Format
@@ -441,6 +443,7 @@ void swap (int *xp, int *yp)
 }
 ```
 In our conversion to assembly, lets look at the registers `%ecx, %edx, %eax, %ebx` and variables `yp, xp, t1, t2`.
+
 ```nasm
 movl 12(%ebp),%ecx ; ecx = yp
 movl 8(%ebp),%edx ; edx = xp
@@ -480,6 +483,11 @@ This is a region of memory that is managed as a stack. It grows towards lower ad
 `pushl SRC` fetches the operand at SRC, decrements %esp by 4 and then writes the operand at address given by %esp.
 #### Popping
 `popl DEST` reads the operand at the address given by %esp, increments %esp by 4, and writes it to DEST.
+### Push and Pop Details
+#### Push
+The `push` instruction pushes data onto the stack. This causes the stack to grow downwards which is why `%esp` is decremented by the size specified by command. For example, `pushl %eax` pushes the contents of `%eax` onto the stack and decrements the stack pointer by 4. Likewise `pushl $0xffffffff` pushes constant `0xffffffff` onto the stack and decrements the stack pointer by 4.
+#### Pop
+The `pop` instruction retrieves data from the stack. This causes the stack to strick upwards so `%esp` gets incremented by the size specified by command. Lets say the top of our stack contained the value `0xaaaaaaaa`. Then after executing `pushl %eax`, `%eax` will contain `0xaaaaaaaa` while the stack pointer gets incremented by 4.
 ### Procedure Control Flow
 Uses the stack to support procedure call and return.
 #### Procedure call
@@ -505,6 +513,7 @@ int a = = *x;
 int *b = x;
 ```
 Lets assume that the int x is stored at address `0x100F`.
+
 ```nasm
 movl 0x100F,%ecx ; Stores the address of int x into ecx
 movl (%ecx), %eax ; Stores the value of x into eax
@@ -554,6 +563,68 @@ arith:
 	popl %ebp ;pops the base pointer to execute next code
 	ret ;returns from function
 ```
+### Saving Convention
+#### Caller
+Before calling a function, the caller will save the contents of certain registers called "caller-saved". These include %eax, %ecx, and %edx. The contents in these registers must be pushed onto the stack so that they can be restored when control returns to the caller in case the callee modifies them.
+#### Callee
+The callee must save the contents in registers %ebx, %edi, and %esi before executing any of the function body instructions.
+
+### The C Call Stack
+Lets take a closer look at what happens behind the scenes when a function gets called. To begin, lets look at a single function call by itself first. We have the code:
+
+```c
+int foobar(int a, int b, int c)
+{
+    int xx = a + 2;
+    int yy = b + 3;
+    int zz = c + 4;
+    int sum = xx + yy + zz;
+
+    return xx * yy * zz + sum;
+}
+
+int main()
+{
+    return foobar(77, 88, 99);
+}
+```  
+Which results in the following stack frame:  
+![stackframe1](resources/stackframe1.png)  
+*Source: [https://eli.thegreenplace.net/2011/02/04/where-the-top-of-the-stack-is-on-x86/](https://eli.thegreenplace.net/2011/02/04/where-the-top-of-the-stack-is-on-x86/)*  
+  
+Notice that the function parameters `a, b, c` exist at the top of the stack in reverse order. Then it is followed by the return address and the saved base pointer. Below the base pointer, we have all of the local variables `xx, yy, zz, sum` in our function foobar(). Any other temporary variables or function calls by foobar() will exist below the saved base pointer.
+
+--- 
+Now lets take a look at a function that calls another function.  
+![call_stack1](resources/call_stack1.png)  
+First note that Foo()'s parameters, saved registers, temporary variables and return address is not shown in the drawing as it is above "Saved eax". What we can see however, is argument3, argument2, and argument1. These the parameters that get passed to function Bar(). The arguments are then followed by a return address so after Bar() finishes execution, control is restored to Foo(), which probably goes back to main(). As we can see below the return address we once again have the saved base pointer and another saved register. Finally below that, is the local variable beloing to Bar().
+### Procedure Call Conventions
+#### Caller
+##### Pre-Call
+1. Follow the caller-save convention by saving %eax, %ecx, and %edx.
+2. To pass paremeters to the sub-routine push them into the stack in reverse order.
+3. Use the `call` instruction to call the sub-routine which pushes the return address onto the top of the stack and branches to the sub-routine code.
+
+
+##### Post-Call
+1. Pops all of the parameters from the stack to restore it to previous state.
+2. Restore the contents of the caller-saved registers by popping from stack. Caller can assume no other registers were modified by sub-routine.
+
+---
+#### Callee
+##### Pre-Execution
+1. Push the value of the base pointer %ebp onto the stack and then copy the value of stack pointer %esp into %ebp. Using `pushl %ebp` then `movl %esp, %ebp`. This is so that the location of parameters and local variables will known as a constant offset from the base pointer.
+2. Allocate local variables by making space on the stack by decrementing the stack pointer.
+3. Save the values of the callee-saved registers.
+
+##### Post-Execution
+1. The return value of the function is left in %eax.
+2. Restore the old values of callee-saved registers from popping from the stack.
+3. Deallocate local variables by moving the value of the base pointer to the stack pointer.
+4. Restore the caller's base pointer by popping %ebp from the stack right before returning.
+5. Return to the caller using the `ret` instruction.
+
+
 ### Control Flow/Conditionals
 Conditional branches implement control flow in higher level language such as `if/then`, `while`, and `for`. An unconditional branch is something like a `break` or `continue`.
 
@@ -597,3 +668,232 @@ L9:
 	ret ;returns from function
 ```
 Note that the value at %eax is the return value from the function due to the calling convention.
+### Do-While Loops
+Do while loops are a step up from machine code like goto statements.  
+**Do-While**
+
+```c
+int fact_do(int x)
+{
+ int result = 1;
+ do {
+ result *= x;
+ x = x-1;
+ } while (x > 1);
+ return result;
+}
+```
+**Goto**
+
+```c
+int fact_goto(int x)
+{
+ int result = 1;
+loop:
+ result *= x;
+ x = x-1;
+ if (x > 1)
+ goto loop;
+ return result;
+}
+```
+Both methods use backwards branching to loop. We only take the branch if the "while" condition holds.  
+In assembly we get something like this:
+
+```nasm
+ pushl %ebp ; Setup
+ movl %esp,%ebp ; Setup
+ movl $1,%eax ; eax = 1
+ movl 8(%ebp),%edx ; edx = x
+L11:
+ imull %edx,%eax ; result *= x
+ decl %edx ; x--
+ cmpl $1,%edx ; Compare x : 1
+ jg L11 ; if > goto loop
+ movl %ebp,%esp ; Finish
+ popl %ebp ; Finish
+ ret ; Finish
+```
+In each iteration of the loop, %edx is compared against 1 to see whether or not to branch back or continue execution.
+
+### Converting Do-While to Goto
+This can be done easily by adding an if statement that determines whether or not to jump backwards.
+
+```c
+// Do-While
+do
+ Body
+ while (Test);
+
+// Goto
+loop:
+ Body
+ if (Test)
+ goto loop
+```
+Note **Body** can be any number of C statements and **Test** is the expression that returns a integer/boolean value where if (test == 0 --> false, test != 0 --> true).
+
+### Converting While Loops
+To convert a while loop to do-while or goto, an additional jump needs to be made to see whether the initial condition was satisfied.
+
+```c
+// while
+while (Test)
+ Body
+ 
+// do-while
+if (!Test) // check the initial condition
+ goto done; // edit loop if failed
+do
+ Body
+ while(Test);
+done:
+
+// goto
+if (!Test) // check initial condition
+ goto done; // exit loop if failed
+loop:
+	Body
+	if (Test)
+	  goto loop;
+done:
+```
+### Switch Statements
+Switch statements are implemented in two ways.
+
+1. A series of conditionals which is good if there are few cases but slow if there are many.
+2. A jump table that avoid conditionals but only possible when the cases are small integer constants.
+
+GCC will pick the appropriate one depending on the case structure.
+### Jump Tables
+Jump tables can be thought of as a very simple hashtable. The data is stored in an array like structure where the case value is used as a key to fetch the selected information. ![alt jump-table](resources/jump-table.png)
+### Switch Statement Example
+In order to use a jump table, case values are often enumerated. Lets look an at example of them in action.
+
+```c
+typedef enum
+ {ADD, MULT, MINUS, DIV, MOD, BAD}
+ op_type;
+char unparse_symbol(op_type op)
+{
+ switch (op) {
+ 	...
+ }
+}
+```
+```nasm
+unparse_symbol:
+ pushl %ebp 		; Setup
+ movl %esp,%ebp 	; Setup
+ movl 8(%ebp),%eax 	; eax = op
+ cmpl $5,%eax 		; Compare op : 5
+ jmp .L49 			; If > goto done
+ jmp *.L57(,%eax,4) ; goto Table[op]
+```
+Note the base address of the jump table is located at `.L57`. The instruction `jmp *.L57(,%eax,4)` goes to the address calculated by `.L57` + `%eax`(contains enumerated case value) * `4`(scales the value to fit an integer).
+
+### Reading Condition Codes
+The instruction `set<x>` sets a single byte based on the combinations of condition codes. ![setx](resources/setx.png)  
+Because it only sets a single byte, it is commonly used in conjunction with `movzbl` after use with the singly byte registers to map to a full sized register.
+
+```c
+int gt (int x, int y) {
+ return x > y;
+}
+```
+
+```nasm
+movl 12(%ebp),%eax 	; eax = y
+cmpl %eax,8(%ebp) 	; Compare x : y
+setg %al 			; al = x > y
+movzbl %al,%eax 	; Zero rest of %eax
+```
+### Stack-Based Languages
+Recursion is only possible in languages that are "Reentrant". This means that you can have multiple simutaneous instantiations of a single procedure. The stack is allocated in frames aka "activation records" which contains everything needed in a particular function call (local variables, return pointer, arguments...).
+
+### Stack Frames
+Stack frames are a temporary space that contain contain local variables, the return value, and things a function needs. They are set up before entering a procedure and deallocated when returning. The **stack pointer** `%esp` points to the top of the stack. The **frame pointer** `%ebp~ contains the start of the current frame.
+
+### Stack Operation
+Stack frames grow from top to bottom. Each time a new function is called, %ebp is pushed onto the stack and then set to equal %esp, and %esp is decremented to a lower address. Each time a function returns, %esp is set to equal %ebp and %ebp is restored from the stack.
+
+### IA32/Linux Stack Frame
+The caller stack frame contains the return address and arguments for the caller function. The current stack frame contains the parameters for the callee function, local variables, saved register context, and old frame pointer.
+
+---
+![stackframe2](resources/stackframe2.png)
+---
+
+###IA32/Linux Register Usage
+* Special uses: `%ebp, %esp`
+* Callee-save: `%ebx, %esi, %edi` old values are saved on stack prior to use
+* Caller-save: `%eax, %edx, %ecx`
+* Return value: `%eax`
+
+
+### Basic Data Types
+![stackframe2](resources/datatypes.png)
+
+### Array Allocation
+Arrays are simply contigously allocated region of a particular data type. Accessing an array using assembly requires the use of a scaled offset on the base address of the array.
+
+### Structure Allocation
+Again are contigously allocated regions in memory which contains members that may be different data types. To access a struct member, you must once again use a scaled offset on the base address. The size of the offsets are determined during compile time.
+
+### Alignment
+Primitive data types require K bytes so addresses must me multiples of K. As a result memory accessed by aligned double or quad words are much faster when the data is stored within the boundaries. To do this, a compiler inserts gaps in structures.
+
+### Statisfying Alignment with Structures
+To satify every element's alignment requirement, we choose the largest alignment requirement (K). The initial address and structure length must be multiples of K. However, the padding used for padding for an individual member depends on its own size.
+
+```c
+struct S1 {
+ char c;
+ int i[2];
+ double v;
+} *p;
+```
+In this struct, the largest data type is "double" so K = 8.  
+
+---
+(p+0) -->| c | padding |(p+4) i[0] | (p+8) i[1] | padding | (p+16) v |<-- (p+24) 
+
+--- 
+As can be seen, `int i[]` has the beggining addresses of 4 and 8 which are both divisible by 4. `double v` has the beggining address 16 which is divisible by 8. The final address is 24 which is also divisible by 8.
+
+-
+#### Important Notes
+* The starting address of the struct array must be multiple of worst-case alignment for any element
+* The offset of an alement within structure must be a multiple of element's akignment requirement
+* The over all size of the structure must be a multiple of worst-case alignment for any element
+
+
+### Ordering Elements Within Structure
+We try to order the elements in a structure so that we waste as little space as possible due to alignment padding.
+
+### Summary
+* Array's don't have bounds checking
+* Arrays are usually just a pointer to the first element
+* Compilers turn array code into pointer code
+* Uses addressing modes to scale array indicies
+* Structure allocate bytes to be declared
+* Structures are padded to satisfy alignment
+
+
+## Digital Design
+### Logical Gates
+Includes:
+NOT, AND, OR, NAND, NOR, XOR...  
+Built using transistors that use discrete values in the form of voltage.
+### Notation
+* AND is denoted as multiplication: `A.B` 
+* OR is denoted as addition `A+B`.
+* NOR is denoted as a bar or more conveniently an apostrophie `A'`
+
+### DeMorgans Law
+
+1. (P.Q)' = P' + Q'
+2. (P + Q)' = P'.Q
+
+### Universal Gates
+Any gate can be implemented using either NOR or NAND gates.
