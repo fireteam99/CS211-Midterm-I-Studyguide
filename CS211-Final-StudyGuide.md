@@ -980,4 +980,90 @@ We meed to implement `A'B` for Y.
 ![alt fin-logc](resources/finished-logic.png)
 
 ## Caches
+### Random Access Memory (RAM)
+There are two types of RAM: Static RAM or SRAM(faster and more expensive) and Dynamic Ram or DRAM(slower and cheaper).
+### System/Memory Bus
+Buses are a collection of wires that carry address, data, and control signals.
+### Memory Hierarchy
+L0(registers) --> L1(on-chip cache SRAM) --> L2(off-chip cache SRAM) --> L3(main memory DRAM) --> L4(local secondary storage local disks)
+### Cache Memories
+Caches hold frequently accessed blocks of memory so the CPU will look for data in L1, L2, then main memory.
+### Locality
+Memory references are bunched together and only a small portion of main memory can be held in caches at one time.
+#### Temporal Locality
+Recently accessed locations will be accessed again in the near future. Think loops.
+#### Spatial Locality
+Will likely access locations closed to ones recently accessed in near future. Think arrays and structs, and local variables.
+### General Caching Concepts
+Say that we a level k cache backed up by a level k+1 cache.  
+**Cache hit**:  
+On a cache hit, the program finds the item at level k and returns it.  
+**Cache miss**:  
+On a cache miss, the program checks level k+1. If found in k+1, we load the block into k. Depending on whether or not k is full we need to take a look at *Placement Policy*(where a new block can be placed) and *Replacement Policy*(which block should be evicted). If The block is not in k+1 we need to then search main memory and load the block into k and k+1.
 
+### Cache Miss
+Three types of misses:
+
+* Cold (compulsary) miss: when a memory location is accessed for the 1st time
+* Conflict miss: when two pieces of memory map to the same cache line(block)
+* Capacity miss: happens when the cache itself runs out of room
+
+### General Organization of Cache
+A cache is an array of sets. Each set contains one or more lines. Each line holds a block of data (a valid bit, t tag bits, and a 2^b byte block).
+
+### Addressing Caches
+Generally we have t bits for the tag, s bits for the set index, and b bits for the block offset. `<tag><set index><block offset>`
+
+### Direct-Mapped Cache
+The simplest kind of cache with one line per set.
+
+### Accessing Direct-Mapped Caches
+
+1. Use the set index bits to determine the set.
+2. Find the valid line in selected set using the tag.
+3. Extract the word.
+
+### Set Associative Caches
+Contains more that one line per set.
+
+### Accessing Set Associative Caches
+
+1. Use set index bits to find the correct set.
+2. Compare the tag bits to each valid line to find the correct line.
+3. Extract word.
+
+### Replacement
+If cache miss but all entries in set are vald.
+
+* In a directly mapped cache we just discard the current content and load needed block in.
+* In a set Associate cache we need to use a replacement algorithm to choose a line to evict.
+* Choose from: First in first out (FIFO), Least recently used (LRU), amd Random.
+
+### Fully Associative Caches
+Theres only one set so we don't need to worry about it. To access a cache line we just need to find a matching tag.
+
+### Calculating Cache Sizes
+#### Directly Mapped
+Let A = # bits in address, C = size of cache, and B = size of block.  
+Num sets = C / B  
+Bits for tag = A - log_base_2(B) - log_base_2(Num sets)  
+Bits for offset = log_base_2(B)
+#### Associative N
+Let A = # bits in address, C = size of cache, and B = size of block, N = associativity.  
+Num sets = C / (B * N)  
+Bits for tag = A - log_base_2(B) - log_base_2(Num sets)  
+Bits for offset = log_base_2(B)
+#### Fully Associative
+Let A = # bits in address, C = size of cache, and B = size of block  
+Num sets = 1  
+Bits for tag = A - log_base_2(B) - log_base_2(Num sets)  
+Bits for offset = log_base_2(B)
+
+### Cache Writes
+#### Write Hit
+A **write through** cache will write the data directly to memory. A **write back** cache defers the write until the last possible moment.
+#### Write Miss
+A **write allocate** cache loads the block into memory and updates. A **no write allocate** writes directly to memory.
+
+### Write Back Caches
+Upon a cache hit for a write instruction, we update the memory in the cache and mark it invalid (dirty bit). The next time we need to replace the a block, we check to see if it is dirty and if so, write it back to memory before evicting it.
